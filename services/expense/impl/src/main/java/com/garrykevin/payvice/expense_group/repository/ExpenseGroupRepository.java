@@ -1,7 +1,6 @@
-package com.garrykevin.payvice.repository;
+package com.garrykevin.payvice.expense_group.repository;
 
-import com.garrykevin.payvice.model.ExpenseGroup;
-import java.util.Optional;
+import com.garrykevin.payvice.expense_group.model.ExpenseGroup;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

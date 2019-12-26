@@ -1,4 +1,4 @@
-package com.garrykevin.payvice.model;
+package com.garrykevin.payvice.expense_group.model;
 
 
 import java.time.Instant;

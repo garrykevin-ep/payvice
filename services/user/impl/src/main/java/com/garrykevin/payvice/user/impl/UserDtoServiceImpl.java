@@ -1,10 +1,10 @@
-package com.garrykevin.payvice.impl;
+package com.garrykevin.payvice.user.impl;
 
-import com.garrykevin.payvice.UserDto;
-import com.garrykevin.payvice.UserDtoService;
-import com.garrykevin.payvice.mapper.UserMapper;
-import com.garrykevin.payvice.model.User;
-import com.garrykevin.payvice.repository.UserRepository;
+import com.garrykevin.payvice.user.UserDto;
+import com.garrykevin.payvice.user.UserDtoService;
+import com.garrykevin.payvice.user.mapper.UserMapper;
+import com.garrykevin.payvice.user.model.User;
+import com.garrykevin.payvice.user.repository.UserRepository;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;

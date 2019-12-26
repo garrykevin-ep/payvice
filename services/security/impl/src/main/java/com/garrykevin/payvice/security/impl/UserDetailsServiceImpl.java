@@ -2,9 +2,9 @@ package com.garrykevin.payvice.security.impl;
 
 
 
-import com.garrykevin.payvice.UserDto;
+import com.garrykevin.payvice.user.UserDto;
 
-import com.garrykevin.payvice.UserDtoService;
+import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.security.impl.model.CustomUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

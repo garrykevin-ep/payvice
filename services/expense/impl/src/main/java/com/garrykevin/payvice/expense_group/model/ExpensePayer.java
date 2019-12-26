@@ -1,4 +1,4 @@
-package com.garrykevin.payvice.model;
+package com.garrykevin.payvice.expense_group.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class ExpenseParticipants {
+public class ExpensePayer {
 
   @Id
   private Integer id;
@@ -16,9 +16,9 @@ public class ExpenseParticipants {
   private Integer expenseId;
 
   @Column
-  private Float oweAmount;
+  private Integer userId;
 
   @Column
-  private Integer userId;
+  private Integer shareAmount;
 
 }

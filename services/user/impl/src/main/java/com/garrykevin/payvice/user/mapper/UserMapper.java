@@ -1,8 +1,8 @@
-package com.garrykevin.payvice.mapper;
+package com.garrykevin.payvice.user.mapper;
 
 
-import com.garrykevin.payvice.UserDto;
-import com.garrykevin.payvice.model.User;
+import com.garrykevin.payvice.user.UserDto;
+import com.garrykevin.payvice.user.model.User;
 import java.util.List;
 import org.mapstruct.Mapper;
 

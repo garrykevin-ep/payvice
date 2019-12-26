@@ -1,4 +1,4 @@
-package com.garrykevin.payvice.model;
+package com.garrykevin.payvice.user.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

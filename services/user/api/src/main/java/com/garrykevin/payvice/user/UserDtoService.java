@@ -1,7 +1,5 @@
-package com.garrykevin.payvice;
+package com.garrykevin.payvice.user;
 
-import com.garrykevin.payvice.UserDto;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

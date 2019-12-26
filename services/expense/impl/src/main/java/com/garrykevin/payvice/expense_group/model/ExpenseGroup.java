@@ -1,6 +1,6 @@
-package com.garrykevin.payvice.model;
+package com.garrykevin.payvice.expense_group.model;
 
-import com.garrykevin.payvice.model.User;
+import com.garrykevin.payvice.user.model.User;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;

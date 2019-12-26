@@ -1,6 +1,6 @@
-package com.garrykevin.payvice.repository;
+package com.garrykevin.payvice.user.repository;
 
-import com.garrykevin.payvice.model.User;
+import com.garrykevin.payvice.user.model.User;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.repository.CrudRepository;

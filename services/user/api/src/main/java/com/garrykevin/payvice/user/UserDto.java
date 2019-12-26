@@ -1,4 +1,4 @@
-package com.garrykevin.payvice;
+package com.garrykevin.payvice.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

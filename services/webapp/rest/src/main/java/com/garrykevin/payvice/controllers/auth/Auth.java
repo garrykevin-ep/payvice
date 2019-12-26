@@ -1,9 +1,9 @@
 package com.garrykevin.payvice.controllers.auth;
 
 
-import com.garrykevin.payvice.UserDto;
-import com.garrykevin.payvice.UserDtoService;
-import com.garrykevin.payvice.mapper.UserMapper;
+import com.garrykevin.payvice.user.UserDto;
+import com.garrykevin.payvice.user.UserDtoService;
+import com.garrykevin.payvice.user.mapper.UserMapper;
 import com.garrykevin.payvice.security.impl.jwt.JwtTokenUtil;
 import com.garrykevin.payvice.security.impl.model.CustomUserPrincipal;
 import javax.servlet.http.HttpServletRequest;

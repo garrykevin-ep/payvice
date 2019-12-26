@@ -1,6 +1,6 @@
 package com.garrykevin.payvice.security.impl.model;
 
-import com.garrykevin.payvice.UserDto;
+import com.garrykevin.payvice.user.UserDto;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
