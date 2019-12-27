@@ -1,12 +1,20 @@
 package com.garrykevin.payvice.controllers;
 
-import com.garrykevin.payvice.expense_group.model.ExpenseGroup;
+import com.garrykevin.payvice.expense_group.CreateExpenseGroupParam;
+import com.garrykevin.payvice.expense_group.ExpenseGroupDto;
+import com.garrykevin.payvice.expense_group.ExpenseGroupDtoService;
+import com.garrykevin.payvice.expense_group.ExpenseGroupMemberParam;
+import com.garrykevin.payvice.expense_group.mapper.ExpenseGroupMapper;
 import com.garrykevin.payvice.expense_group.repository.ExpenseGroupRepository;
+import com.garrykevin.payvice.request.expense_group.CreateExpenseGroupRequest;
+import com.garrykevin.payvice.request.expense_group.ExpenseGroupMemberRequest;
 import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.user.model.User;
 import com.garrykevin.payvice.user.repository.UserRepository;
-import com.garrykevin.payvice.request.ExpenseGroupRequest;
+import com.garrykevin.payvice.request.expense_group.ExpenseGroupRequest;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,23 +26,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExpenseGroupController {
 
   @Autowired
-  ExpenseGroupRepository expenseGroupRepository;
+  ExpenseGroupDtoService expenseGroupDtoService;
 
   @Autowired
-  UserDtoService userDtoService;
-
-  @Autowired
-  UserRepository userRepository;
+  ExpenseGroupMapper expenseGroupMapper;
 
   @PostMapping
-  public String createExpenseGroup(@RequestBody ExpenseGroupRequest expenseGroupRequest){
-    ExpenseGroup expenseGroup = new ExpenseGroup();
-//    Set<UserDto> userDtos = userDtoService.getByIds(expenseGroupRequest.getUserIds().stream().collect(
-//      Collectors.toList()));
-    Set<User> users = userRepository.findByIdIn(expenseGroupRequest.getUserIds());
-    expenseGroup.setName("new Expense");
-    expenseGroup.setUsers(users);
-    expenseGroupRepository.save(expenseGroup);
-   return "ok";
+  public ExpenseGroupDto createExpenseGroup(@RequestBody CreateExpenseGroupRequest createExpenseGroupRequest){
+    CreateExpenseGroupParam createExpenseGroupParam = convertCreateExpenseGroupRequestToParam(createExpenseGroupRequest);
+    return expenseGroupDtoService.create(createExpenseGroupParam);
+  }
+
+  private CreateExpenseGroupParam convertCreateExpenseGroupRequestToParam(CreateExpenseGroupRequest createExpenseGroupRequest){
+    CreateExpenseGroupParam createExpenseGroupParam = new CreateExpenseGroupParam();
+    createExpenseGroupParam.setName(createExpenseGroupRequest.getName());
+
+    Function<ExpenseGroupMemberRequest, ExpenseGroupMemberParam> convertRequestToParam = (requestMember) -> {
+      ExpenseGroupMemberParam expenseGroupMemberParam =  new ExpenseGroupMemberParam();
+      // TODO: handle email and phone
+      expenseGroupMemberParam.setId(requestMember.getUserId());
+      return  expenseGroupMemberParam;
+    };
+
+    createExpenseGroupParam.setMembers(createExpenseGroupRequest.getExpenseGroupMember()
+      .stream().map(convertRequestToParam).collect(Collectors.<ExpenseGroupMemberParam>toList()));
+    return createExpenseGroupParam;
   }
 }

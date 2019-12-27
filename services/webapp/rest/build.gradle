@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":services:user:user-impl"))
     implementation(project(":services:user:user-api"))
     implementation(project(":services:expense:expense-impl"))
+    implementation(project(":services:expense:expense-api"))
     implementation(project(":services:security:security-impl"))
 
     //spring

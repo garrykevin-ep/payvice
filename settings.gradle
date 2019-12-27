@@ -10,5 +10,5 @@ findProject(':services:user:api')?.name = 'user-api'
 include 'services:expense:impl'
 findProject(':services:expense:impl')?.name = 'expense-impl'
 include 'services:expense:api'
-findProject(':services:expense:api')?.name = 'payvice'
+findProject(':services:expense:api')?.name = 'expense-api'
 

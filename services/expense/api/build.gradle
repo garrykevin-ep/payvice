@@ -12,6 +12,8 @@ repositories {
 }
 
 dependencies {
+    //internal projects
+    implementation(project(":services:user:user-api"))
 
     // Jackson for JSON annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
