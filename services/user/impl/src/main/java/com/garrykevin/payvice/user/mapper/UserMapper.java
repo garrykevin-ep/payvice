@@ -14,6 +14,8 @@ public interface UserMapper {
 
   List<UserDto> modelToDtos(final List<User> users);
 
+  Set<UserDto> modelToDtos(final Set<User> users);
+
   User dtoToModel(final UserDto userDto);
 
   List<User> dtosToModels(final List<UserDto> userDtos);
