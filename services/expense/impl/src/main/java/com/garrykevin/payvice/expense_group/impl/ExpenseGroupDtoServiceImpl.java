@@ -10,7 +10,6 @@ import com.garrykevin.payvice.expense_group.repository.ExpenseGroupRepository;
 import com.garrykevin.payvice.user.UserDto;
 import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.user.mapper.UserMapper;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,7 @@ public class ExpenseGroupDtoServiceImpl implements ExpenseGroupDtoService {
       .map(ExpenseGroupMemberParam::getId)
       .collect(Collectors.toSet());
     Set<UserDto> userDtos = userDtoService.getByIds(userIds);
+    //TODO: return does not exist
     ExpenseGroup expenseGroup = new ExpenseGroup();
     expenseGroup.setName(createExpenseGroupParam.getName());
     expenseGroup.setMembers(userMapper.dtosToModels(userDtos));

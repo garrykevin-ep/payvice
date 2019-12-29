@@ -5,14 +5,8 @@ import com.garrykevin.payvice.expense_group.ExpenseGroupDto;
 import com.garrykevin.payvice.expense_group.ExpenseGroupDtoService;
 import com.garrykevin.payvice.expense_group.ExpenseGroupMemberParam;
 import com.garrykevin.payvice.expense_group.mapper.ExpenseGroupMapper;
-import com.garrykevin.payvice.expense_group.repository.ExpenseGroupRepository;
 import com.garrykevin.payvice.request.expense_group.CreateExpenseGroupRequest;
 import com.garrykevin.payvice.request.expense_group.ExpenseGroupMemberRequest;
-import com.garrykevin.payvice.user.UserDtoService;
-import com.garrykevin.payvice.user.model.User;
-import com.garrykevin.payvice.user.repository.UserRepository;
-import com.garrykevin.payvice.request.expense_group.ExpenseGroupRequest;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/expense-group/")
+@RequestMapping("/expense-group")
 public class ExpenseGroupController {
 
   @Autowired
@@ -32,7 +27,7 @@ public class ExpenseGroupController {
   ExpenseGroupMapper expenseGroupMapper;
 
   @PostMapping
-  public ExpenseGroupDto createExpenseGroup(@RequestBody CreateExpenseGroupRequest createExpenseGroupRequest){
+  public ExpenseGroupDto createExpenseGroup(@RequestBody @Valid CreateExpenseGroupRequest createExpenseGroupRequest){
     CreateExpenseGroupParam createExpenseGroupParam = convertCreateExpenseGroupRequestToParam(createExpenseGroupRequest);
     return expenseGroupDtoService.create(createExpenseGroupParam);
   }
