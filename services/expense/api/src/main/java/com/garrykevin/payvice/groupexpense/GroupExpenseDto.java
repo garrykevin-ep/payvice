@@ -1,11 +1,11 @@
-package com.garrykevin.payvice.expense_group;
+package com.garrykevin.payvice.groupexpense;
 
 import com.garrykevin.payvice.user.UserDto;
 import java.util.Set;
 import lombok.Data;
 
 @Data
-public class ExpenseGroupDto {
+public class GroupExpenseDto {
 
   public int id;
 

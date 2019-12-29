@@ -1,4 +1,4 @@
-package com.garrykevin.payvice.expense_group.model;
+package com.garrykevin.payvice.groupexpense.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

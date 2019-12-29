@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-public class ExpenseGroupControllerTest {
+public class GroupExpenseControllerTest {
 
   @Autowired
   MockMvc mockMvc;

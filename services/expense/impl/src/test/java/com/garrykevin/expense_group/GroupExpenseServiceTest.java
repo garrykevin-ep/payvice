@@ -2,11 +2,11 @@ package com.garrykevin.expense_group;
 
 import static org.mockito.Mockito.when;
 
-import com.garrykevin.payvice.expense_group.CreateExpenseGroupParam;
-import com.garrykevin.payvice.expense_group.ExpenseGroupMemberParam;
-import com.garrykevin.payvice.expense_group.impl.ExpenseGroupDtoServiceImpl;
-import com.garrykevin.payvice.expense_group.model.ExpenseGroup;
-import com.garrykevin.payvice.expense_group.repository.ExpenseGroupRepository;
+import com.garrykevin.payvice.groupexpense.CreateGroupExpenseParam;
+import com.garrykevin.payvice.groupexpense.GroupExpenseMemberParam;
+import com.garrykevin.payvice.groupexpense.impl.GroupExpenseDtoServiceImpl;
+import com.garrykevin.payvice.groupexpense.model.GroupExpense;
+import com.garrykevin.payvice.groupexpense.repository.GroupExpenseRepository;
 import com.garrykevin.payvice.user.UserDto;
 import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.user.mapper.UserMapper;
@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@Import(ExpenseGroupDtoServiceImpl.class)
-public class ExpenseGroupServiceTest {
+@Import(GroupExpenseDtoServiceImpl.class)
+public class GroupExpenseServiceTest {
 
   @MockBean
   UserMapper userMapper;
@@ -30,18 +30,18 @@ public class ExpenseGroupServiceTest {
   UserDtoService userDtoService;
 
   @MockBean
-  ExpenseGroupRepository expenseGroupRepository;
+  GroupExpenseRepository groupExpenseRepository;
 
   @Test
   public void createExpenseGroup_withUserid_returnsExpenseGroupDto(){
     //setup input
-    CreateExpenseGroupParam createExpenseGroupParam = new CreateExpenseGroupParam();
-    createExpenseGroupParam.setName("hello");
-    ExpenseGroupMemberParam member1 = new ExpenseGroupMemberParam();
+    CreateGroupExpenseParam createGroupExpenseParam = new CreateGroupExpenseParam();
+    createGroupExpenseParam.setName("hello");
+    GroupExpenseMemberParam member1 = new GroupExpenseMemberParam();
     member1.setId(1l);
-    ExpenseGroupMemberParam member2 = new ExpenseGroupMemberParam();
+    GroupExpenseMemberParam member2 = new GroupExpenseMemberParam();
     member2.setId(2l);
-    createExpenseGroupParam.setMembers(Arrays.asList(member1,member2));
+    createGroupExpenseParam.setMembers(Arrays.asList(member1,member2));
     UserDto userDto1 = new UserDto();
     UserDto userDto2 = new UserDto();
     userDto1.setId(1l);
@@ -49,12 +49,12 @@ public class ExpenseGroupServiceTest {
     //mocking
     when(userDtoService.getByIds(Set.of(1l,2l))).thenReturn(Set.of(userDto1,userDto2));
 
-    ExpenseGroup expenseGroup = new ExpenseGroup();
-    expenseGroup.setName("hello");
+    GroupExpense groupExpense = new GroupExpense();
+    groupExpense.setName("hello");
     User user1 = new User();
     User user2 = new User();
-    expenseGroup.setMembers(Set.of(user1,user2));
-    when(expenseGroupRepository.save(expenseGroup)).thenReturn(expenseGroup);
+    groupExpense.setMembers(Set.of(user1,user2));
+    when(groupExpenseRepository.save(groupExpense)).thenReturn(groupExpense);
 
   }
 

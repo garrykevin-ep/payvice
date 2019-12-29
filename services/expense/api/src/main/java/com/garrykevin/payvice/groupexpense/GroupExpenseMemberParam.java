@@ -1,9 +1,9 @@
-package com.garrykevin.payvice.expense_group;
+package com.garrykevin.payvice.groupexpense;
 
 import lombok.Data;
 
 @Data
-public class ExpenseGroupMemberParam {
+public class GroupExpenseMemberParam {
 
   public Long id;
 

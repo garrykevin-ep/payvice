@@ -1,4 +1,4 @@
-package com.garrykevin.payvice.expense_group.model;
+package com.garrykevin.payvice.groupexpense.model;
 
 import com.garrykevin.payvice.user.model.User;
 import java.util.Set;
@@ -11,12 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Data
-public class ExpenseGroup {
+public class GroupExpense {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +24,7 @@ public class ExpenseGroup {
   private String name;
 
   @ManyToMany
-  @JoinTable(name="expense_group_users",joinColumns = @JoinColumn(name = "id"),
+  @JoinTable(name="group_expense_member",joinColumns = @JoinColumn(name = "id"),
   inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<User> members;
 
