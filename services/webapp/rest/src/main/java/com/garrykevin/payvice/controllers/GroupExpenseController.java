@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/expense-group")
+@RequestMapping("/group-expense")
 public class GroupExpenseController {
 
   @Autowired

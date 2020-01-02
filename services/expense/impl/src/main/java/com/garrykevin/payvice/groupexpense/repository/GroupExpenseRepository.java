@@ -9,5 +9,4 @@ public interface GroupExpenseRepository extends CrudRepository<GroupExpense,Long
 
   GroupExpense save(GroupExpense groupExpense);
 
-
 }

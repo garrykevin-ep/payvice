@@ -31,6 +31,7 @@ dependencies {
 
     implementation(project(":services:user:user-impl"))
     implementation(project(":services:user:user-api"))
+    implementation(project(":services:common:common-exceptions"))
     implementation(project(":services:expense:expense-api"))
 
     //mapper

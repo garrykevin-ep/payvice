@@ -11,4 +11,8 @@ include 'services:expense:impl'
 findProject(':services:expense:impl')?.name = 'expense-impl'
 include 'services:expense:api'
 findProject(':services:expense:api')?.name = 'expense-api'
+include 'services:common:constants'
+findProject(':services:common:constants')?.name = 'common-constants'
+include 'services:common:exceptions'
+findProject(':services:common:exceptions')?.name = 'common-exceptions'
 
