@@ -9,6 +9,7 @@ import com.garrykevin.payvice.expense.ExpenseDtoService;
 import com.garrykevin.payvice.expense.ExpenseParticipantParam;
 import com.garrykevin.payvice.expense.ExpensePayerParam;
 import com.garrykevin.payvice.groupexpense.model.Expense;
+import com.garrykevin.payvice.groupexpense.model.ExpenseDebt;
 import com.garrykevin.payvice.groupexpense.model.ExpenseParticipant;
 import com.garrykevin.payvice.groupexpense.model.ExpensePayer;
 import com.garrykevin.payvice.groupexpense.model.GroupExpense;
@@ -18,6 +19,7 @@ import com.garrykevin.payvice.user.model.User;
 import com.garrykevin.payvice.user.repository.UserRepository;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,10 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
     Expense expense = new Expense();
     expense.setName(createExpenseParam.getName());
     expense.setAmount(createExpenseParam.getAmount());
+    //TODO group expense does not exist return errork
     expense.setGroupExpense(groupExpense.get());
+
+
 
     // get expenseParticipants from repo
     Set<User> expenseParticipants = userRepository.findByIdIn(
@@ -100,7 +105,83 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
 
     expense.setExpensePayer(expensePayers);
 
-    expenseRepository.save(expense);
+    Debt debt = new Debt(expensePayers, expense.getExpenseParticipants());
+
+    debt.subractParticipantPaidAmount();
+    Set<ExpenseDebt> expenseDebts = debt.calculateDebt();
+
+//    expenseRepository.save(expense);
     return null;
   }
+
+  /**
+   * subract what the
+   */
+  private Set<ExpensePayer> subractParticipantPaidAmount(Set<ExpensePayer> expensePayers,
+    Set<ExpenseParticipant> expenseParticipants){
+
+    for(ExpensePayer expensePayer : expensePayers){
+
+      //find if payer is also involved in the expense
+     ExpenseParticipant expenseParticipant = expenseParticipants.stream()
+       .filter(participant ->
+         participant.getUser().getId() == expensePayer.getUser().getId() )
+       .findAny().orElse(null);
+
+     //then reduce amount what he paid
+     if(expenseParticipant != null){
+       // if true then overpaid
+       Double AmountPaidForOthers = expensePayer.getAmountPaid() >
+         expenseParticipant.getShareAmount() ?
+         expensePayer.getAmountPaid() - expenseParticipant.getShareAmount() : 0;
+        expensePayer.setAmountPaid(AmountPaidForOthers);
+
+        //remove underpayer
+        if (expensePayer.getAmountPaid() == 0){
+          //subtract what he paid
+          expenseParticipant.setShareAmount(expenseParticipant.getShareAmount() - expensePayer.getAmountPaid());
+          expensePayers.remove(expensePayer);
+        }
+     }
+
+    }
+    return expensePayers;
+  }
+
+//  public Set<ExpenseDebt> calculateDebt(Set<ExpensePayer> expensePayers,
+//    Set<ExpenseParticipant> expenseParticipants){
+//
+//    Set<ExpenseDebt> expenseDebts = new TreeSet<ExpenseDebt>();
+//
+//    for(ExpenseParticipant expenseParticipant: expenseParticipants){
+//      for(ExpensePayer expensePayer: expensePayers){
+//
+//        Double debtAmount = expensePayer.getAmountPaid() > expenseParticipant.getShareAmount()
+//          ? expensePayer.getAmountPaid() - expenseParticipant.getShareAmount()
+//          : expensePayer.getAmountPaid();
+//
+//        //subtract payer amount
+//        expensePayer.setAmountPaid(expensePayer.getAmountPaid() - debtAmount);
+//        if(expensePayer.getAmountPaid() == 0){
+//          //remove payer
+//          expensePayers.remove(expensePayer);
+//        }
+//
+//        expenseParticipant.setShareAmount( expenseParticipant.getShareAmount() - debtAmount );
+//        ExpenseDebt expenseDebt = new ExpenseDebt();
+//        expenseDebt.setFrom(expenseParticipant.getUser());
+//        expenseDebt.setTo(expenseParticipant.getUser());
+//        expenseDebt.setAmount(debtAmount);
+//
+//        expenseDebts.add(expenseDebt);
+//
+//        if( expenseParticipant.getShareAmount() == 0 ){
+//          break;
+//        }
+//
+//      }
+//    }
+//    return expenseDebts;
+//  }
+
 }

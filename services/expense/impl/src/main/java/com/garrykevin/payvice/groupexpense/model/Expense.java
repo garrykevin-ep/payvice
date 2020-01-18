@@ -44,4 +44,10 @@ public class Expense {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name="expense_id")
   Set<ExpensePayer> expensePayer;
+
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name="expense_id")
+  Set<ExpenseDebt> expenseDebts;
+
 }

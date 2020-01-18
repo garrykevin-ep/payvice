@@ -30,7 +30,7 @@ public class ExpenseController {
   @PostMapping
   public ExpenseDto createExpense(@Valid @RequestBody  CreateExpenseRequest createExpenseRequest){
 //    convertCreateExpenseRequestToParam(createExpenseRequest);
-//    expenseDtoService.create(convertCreateExpenseRequestToParam(createExpenseRequest));
+    expenseDtoService.create(convertCreateExpenseRequestToParam(createExpenseRequest));
     return null;
 
   }
