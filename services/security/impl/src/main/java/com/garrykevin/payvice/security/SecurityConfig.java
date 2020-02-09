@@ -1,21 +1,31 @@
 package com.garrykevin.payvice.security;
 
 
+import com.garrykevin.payvice.security.impl.OauthSuccessHandler;
 import com.garrykevin.payvice.security.impl.UserDetailsServiceImpl;
 import com.garrykevin.payvice.security.impl.jwt.JwtAuthenticationEntryPoint;
 //import com.garrykevin.payvice.security.impl.jwt.JwtRequestFilter;
 import com.garrykevin.payvice.security.impl.jwt.JwtRequestFilter;
+import com.garrykevin.payvice.security.impl.jwt.JwtTokenUtil;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -36,9 +46,18 @@ public class SecurityConfig {
     private UserDetailsServiceImpl userDetails;
 
     @Autowired
+    private OauthSuccessHandler oauthSuccessHandler;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
       auth.userDetailsService(userDetails);
 //      auth.inMemoryAuthentication().withUser("ram").password("ram").roles("ADMIN");
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+      return super.authenticationManagerBean();
     }
 
     @Override
@@ -48,21 +67,18 @@ public class SecurityConfig {
         .csrf()
         .disable()
         .authorizeRequests()
-        .antMatchers("/**").permitAll()
-        .antMatchers("/user").permitAll()
-        .antMatchers("/auth/**")
-        .permitAll()
+        .antMatchers("/auth/**").permitAll()
+        //allow authenticated requests
         .anyRequest().authenticated()
+        .and()
+        .oauth2Login()
+        .defaultSuccessUrl("/authenticate")
+        .successHandler(oauthSuccessHandler)
+        .permitAll()
         .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationHandler)
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+;
       http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-      return super.authenticationManagerBean();
     }
 
     @Bean

@@ -9,7 +9,7 @@ import lombok.Data;
 public class CreateGroupExpenseRequest extends GroupExpenseRequest {
 
   @JsonProperty("members")
-//  @Size(min=3,message = "group expense has to be created with minimum 3 members")
+//  @Size(min=3,message = "group expense has to be created with minimum 3 users")
   List<GroupExpenseMemberRequest> expenseGroupMember;
 
 }

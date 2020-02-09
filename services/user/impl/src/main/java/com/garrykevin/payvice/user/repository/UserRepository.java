@@ -12,4 +12,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
   Optional<User> findById(Long id);
 
   Set<User> findByIdIn(Set<Long> ids);
+
+  Optional<User> findByEmail(String email);
+
+  User save(User user);
 }

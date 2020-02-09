@@ -1,6 +1,8 @@
 package com.garrykevin.payvice.groupexpense;
 
+import com.garrykevin.payvice.expense.ExpenseDto;
 import com.garrykevin.payvice.user.UserDto;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 
@@ -11,5 +13,7 @@ public class GroupExpenseDto {
 
   public String name;
 
-  Set<UserDto> users;
+  Set<UserDto> members;
+
+  List<ExpenseDto> expenses;
 }

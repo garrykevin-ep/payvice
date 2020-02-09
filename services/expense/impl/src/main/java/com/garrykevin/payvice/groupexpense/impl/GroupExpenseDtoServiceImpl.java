@@ -10,6 +10,9 @@ import com.garrykevin.payvice.groupexpense.repository.GroupExpenseRepository;
 import com.garrykevin.payvice.user.UserDto;
 import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.user.mapper.UserMapper;
+import com.garrykevin.payvice.user.model.User;
+import com.garrykevin.payvice.user.repository.UserRepository;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class GroupExpenseDtoServiceImpl implements GroupExpenseDtoService {
   GroupExpenseRepository groupExpenseRepository;
 
   @Autowired
+  UserRepository userRepository;
+
+  @Autowired
   GroupExpenseMapper groupExpenseMapper;
 
   @Override
@@ -42,6 +48,21 @@ public class GroupExpenseDtoServiceImpl implements GroupExpenseDtoService {
     groupExpense.setName(createGroupExpenseParam.getName());
     groupExpense.setMembers(userMapper.dtosToModels(userDtos));
     groupExpense = groupExpenseRepository.save(groupExpense);
+    return groupExpenseMapper.modelToDto(groupExpense);
+  }
+
+  @Override
+  public List<GroupExpenseDto> getAll(Long userId) {
+    User user = userRepository.findById(userId).get();
+    List<GroupExpense> groupExpenses = groupExpenseRepository.findByMembers(user);
+    return groupExpenseMapper.modelsToDtos(groupExpenses);
+  }
+
+  @Override
+  public GroupExpenseDto getById(Long groupExpenseId) {
+    //TODO:(security) is member then return
+    GroupExpense groupExpense = groupExpenseRepository.findById(groupExpenseId).orElse(null);
+//    List<Expense> groupExpenseExpenses = groupExpense.getExpenses();
     return groupExpenseMapper.modelToDto(groupExpense);
   }
 }

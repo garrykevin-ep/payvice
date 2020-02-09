@@ -40,8 +40,13 @@ public class Auth {
     }
 //    UserDto userDto = new UserDto(1,"garry","dto","garrydto@gmail.com","7272");
     UserDto userDto = new UserDto();
-    CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(userDto,"");
+    CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(userDto);
     return jwtTokenUtil.generateToken(customUserPrincipal);
+  }
+
+  @RequestMapping("/authenticate")
+  public  String authenticate(){
+    return "try to authenticate";
   }
 
 
@@ -50,7 +55,7 @@ public class Auth {
     return "nice";
   }
 
-  @RequestMapping("/user")
+  @RequestMapping("auth/user")
   public UserDto user(HttpServletRequest request){
     return userDtoService.getById(1l).orElseThrow();
   }

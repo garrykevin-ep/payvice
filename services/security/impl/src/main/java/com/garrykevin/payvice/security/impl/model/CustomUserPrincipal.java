@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class CustomUserPrincipal implements UserDetails {
 
   UserDto userDto;
-  private String password;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -21,12 +20,12 @@ public class CustomUserPrincipal implements UserDetails {
 
   @Override
   public String getPassword() {
-    return password;
+    return null;
   }
 
   @Override
   public String getUsername() {
-    return getUserDto().getFirstName();
+    return getUserDto().getName();
   }
 
   @Override

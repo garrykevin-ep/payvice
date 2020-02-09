@@ -1,5 +1,6 @@
 package com.garrykevin.payvice.user.impl;
 
+import com.garrykevin.payvice.user.UserCreateParam;
 import com.garrykevin.payvice.user.UserDto;
 import com.garrykevin.payvice.user.UserDtoService;
 import com.garrykevin.payvice.user.mapper.UserMapper;
@@ -22,7 +23,19 @@ public class UserDtoServiceImpl implements UserDtoService {
 
   @Override
   public Optional<UserDto> getById(Long id) {
-    User user = userRepository.findById(id).orElseThrow();
+    User user = userRepository.findById(id).get();
+    if (user == null){
+      return Optional.empty();
+    }
+    return Optional.of(userMapper.modelToDto(user));
+  }
+
+  @Override
+  public Optional<UserDto> getByEmail(String email) {
+    User user = userRepository.findByEmail(email).orElse(null);
+    if(user == null){
+      return Optional.empty();
+    }
     return Optional.of(userMapper.modelToDto(user));
   }
 
@@ -32,4 +45,19 @@ public class UserDtoServiceImpl implements UserDtoService {
    return userMapper.modelToDtos(users.stream().collect(Collectors.toList()))
      .stream().collect(Collectors.toSet());
   }
+
+  @Override
+  /**
+   *  validates and creates user
+   */
+  public UserDto register(UserCreateParam userCreateParam) {
+    //todo validate for existing user
+    User user = new User();
+    user.setName(userCreateParam.getName());
+    user.setEmail(userCreateParam.getEmail());
+    user = userRepository.save(user);
+    return userMapper.modelToDto(user);
+  }
+
+
 }

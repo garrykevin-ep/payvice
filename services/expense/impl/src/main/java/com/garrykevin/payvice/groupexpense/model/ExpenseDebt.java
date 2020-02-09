@@ -6,26 +6,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
 @Data
-public class ExpenseParticipant {
+public class ExpenseDebt {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-//  @ManyToOne
-//  private Expense Expense;
-
-  @Column
-  private Double shareAmount;
+  @OneToOne
+  private User lender;
 
   @OneToOne
-  private User user;
+  private User borrower;
+
+  @Column
+  private Double amount;
 
 }
