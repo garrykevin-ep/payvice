@@ -8,8 +8,8 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class,ExpenseParticipantMapper.class})
-@DecoratedWith(GroupExpenseMapperDecorator.class)
+@Mapper(componentModel = "spring", uses = {UserMapper.class,ExpenseMapper.class})
+//@DecoratedWith(GroupExpenseMapperDecorator.class)
 public interface GroupExpenseMapper {
 
 //  @Mapping(target = "me", source = "users")

@@ -19,7 +19,11 @@ public class ExpenseDto {
   @JsonProperty("expense_participants")
   List<ExpenseParticipantDto> expenseParticipants;
 
-//  List<Integer> expensePayer;
+  @JsonProperty("expense_payers")
+  List<ExpensePayerDto> expensePayer;
+
+  @JsonProperty("expense_debts")
+  List<ExpenseDebtDto> expenseDebts;
 
 //  List<Integer> expnse
 

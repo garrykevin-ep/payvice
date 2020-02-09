@@ -8,6 +8,7 @@ import com.garrykevin.payvice.expense.ExpenseDto;
 import com.garrykevin.payvice.expense.ExpenseDtoService;
 import com.garrykevin.payvice.expense.ExpenseParticipantParam;
 import com.garrykevin.payvice.expense.ExpensePayerParam;
+import com.garrykevin.payvice.groupexpense.mapper.ExpenseMapper;
 import com.garrykevin.payvice.groupexpense.model.Expense;
 import com.garrykevin.payvice.groupexpense.model.ExpenseDebt;
 import com.garrykevin.payvice.groupexpense.model.ExpenseParticipant;
@@ -37,6 +38,9 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  ExpenseMapper expenseMapper;
+
   @Override
   public ExpenseDto create(CreateExpenseParam createExpenseParam) {
     Optional<GroupExpense> groupExpense = groupExpenseRepository.findById(createExpenseParam.getGroupId());
@@ -50,34 +54,34 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
 
 
     // get expenseParticipants from repo
-    Set<User> expenseParticipants = userRepository.findByIdIn(
+    Set<User> expenseUserParticipants = userRepository.findByIdIn(
       createExpenseParam.getExpenseParticipants().stream()
         .map(ExpenseParticipantParam::getUserId).collect(Collectors.toSet())
     );
 
     // creating expense participants
-    expense.setExpenseParticipants(
-      createExpenseParam.getExpenseParticipants()
-        .stream()
-        .map(param -> {
-          ExpenseParticipant expenseParticipant = new ExpenseParticipant();
-          expenseParticipant.setUser(
-            // iterate users and create user
-            expenseParticipants.stream()
-              .filter(user -> param.getUserId() == user.getId())
-              .findAny()
-              .orElseThrow(() -> new UserNotFoundException(ApplicationErrorCodes.USER_NOT_FOUND))
-          );
+    Set<ExpenseParticipant> expenseParticipants = createExpenseParam.getExpenseParticipants()
+      .stream()
+      .map(param -> {
+        ExpenseParticipant expenseParticipant = new ExpenseParticipant();
+        expenseParticipant.setUser(
+          // iterate users and create user
+          expenseUserParticipants.stream()
+            .filter(user -> param.getUserId() == user.getId())
+            .findAny()
+            .orElseThrow(() -> new UserNotFoundException(ApplicationErrorCodes.USER_NOT_FOUND))
+        );
 
-          // set participant share
-          if ( createExpenseParam.getShareType() == PayviceConstants.EQUAL_SHARE ) {
-            expenseParticipant.setShareAmount(createExpenseParam.getAmount() / (double) expenseParticipants.size() );
+        // set participant share
+        if ( createExpenseParam.getShareType() == PayviceConstants.EQUAL_SHARE ) {
+          expenseParticipant.setShareAmount(createExpenseParam.getAmount() / (double) expenseUserParticipants.size() );
 
-          }
-          return expenseParticipant;
-        })
-        .collect(Collectors.toSet())
-    );
+        }
+        return expenseParticipant;
+      })
+      .collect(Collectors.toSet());
+    // set expense participants
+    expense.setExpenseParticipants(expenseParticipants);
 
     // get expense payers from repo
     Set<User> expenseUsersPayers = userRepository.findByIdIn(
@@ -108,13 +112,12 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
 
     Debt debt = new Debt(expensePayers, expense.getExpenseParticipants());
 
-    debt.subractParticipantPaidAmount();
     Set<ExpenseDebt> expenseDebts = debt.calculateDebt();
 
     expense.setExpenseDebts(expenseDebts);
 
     expenseRepository.save(expense);
-    return null;
+    return expenseMapper.modelToDto(expense);
   }
 
 

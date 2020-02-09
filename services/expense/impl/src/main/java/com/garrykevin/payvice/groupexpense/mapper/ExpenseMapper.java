@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Set;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {ExpenseParticipantMapper.class})
+@Mapper(componentModel = "spring", uses = {ExpenseParticipantMapper.class,
+  ExpensePayerMapper.class,ExpenseDebtMapper.class})
 public interface ExpenseMapper {
 
   ExpenseDto modelToDto(final Expense expense);

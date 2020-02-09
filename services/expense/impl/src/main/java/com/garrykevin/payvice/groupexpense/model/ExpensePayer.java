@@ -14,7 +14,7 @@ import lombok.Data;
 public class ExpensePayer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
 //  @Column

@@ -1,24 +1,39 @@
 package com.garrykevin.payvice.groupexpense.impl;
 
+import com.garrykevin.payvice.groupexpense.model.Expense;
 import com.garrykevin.payvice.groupexpense.model.ExpenseDebt;
 import com.garrykevin.payvice.groupexpense.model.ExpenseParticipant;
 import com.garrykevin.payvice.groupexpense.model.ExpensePayer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
 
-@AllArgsConstructor
 public class Debt {
 
   private Set<ExpensePayer> expensePayers;
+
   private Set<ExpenseParticipant> expenseParticipants;
 
+  public Debt(Set<ExpensePayer> expensePayers,
+    Set<ExpenseParticipant> expenseParticipants) {
+      this.expensePayers = expensePayers.stream()
+      .map(param -> {
+        ExpensePayer expensePayer = new ExpensePayer();
+        expensePayer.setUser(param.getUser());
+        expensePayer.setAmountPaid(param.getAmountPaid());
+        return expensePayer;
+      }).collect(Collectors.toSet());
+    this.expenseParticipants = expenseParticipants.stream()
+      .map(param -> {
+        ExpenseParticipant expenseParticipant = new ExpenseParticipant();
+        expenseParticipant.setUser(param.getUser());
+        expenseParticipant.setShareAmount(param.getShareAmount());
+        return expenseParticipant;
+      }).collect(Collectors.toSet());
+  }
 
-  public void subractParticipantPaidAmount(){
+  public void subtractParticipantPaidAmount(){
 
     Iterator<ExpensePayer> expensePayerIterator = this.expensePayers.iterator();
     while(expensePayerIterator.hasNext()){
@@ -66,7 +81,7 @@ public class Debt {
 
   public Set<ExpenseDebt> calculateDebt(){
 
-    this.subractParticipantPaidAmount();
+    this.subtractParticipantPaidAmount();
 
     Set<ExpenseDebt> expenseDebts = new HashSet<ExpenseDebt>();
 

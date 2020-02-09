@@ -16,14 +16,14 @@ import lombok.Data;
 public class ExpenseParticipant {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
 //  @ManyToOne
 //  private Expense Expense;
 
   @Column
-  private Double shareAmount;
+  private double shareAmount;
 
   @OneToOne
   private User user;
