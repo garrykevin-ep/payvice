@@ -8,12 +8,15 @@ import com.garrykevin.payvice.groupexpense.mapper.GroupExpenseMapper;
 import com.garrykevin.payvice.groupexpense.model.GroupExpense;
 import com.garrykevin.payvice.request.groupexpense.CreateGroupExpenseRequest;
 import com.garrykevin.payvice.request.groupexpense.GroupExpenseMemberRequest;
+import com.garrykevin.payvice.response.GroupExpenseResponse;
 import com.garrykevin.payvice.security.impl.model.CustomUserPrincipal;
 import com.garrykevin.payvice.user.UserDto;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/group-expense")
+@RequestMapping("/group-expenses")
 public class GroupExpenseController {
 
   @Autowired
@@ -39,10 +42,12 @@ public class GroupExpenseController {
   }
 
   @GetMapping
-  public List<GroupExpenseDto> getGroupExpenses(Authentication authentication){
+  public ResponseEntity getGroupExpenses(Authentication authentication){
     CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
     UserDto userDto = customUserPrincipal.getUserDto();
-    return groupExpenseDtoService.getAll(userDto.getId());
+    GroupExpenseResponse groupExpenseResponse = new GroupExpenseResponse();
+    groupExpenseResponse.setGroupExpenseDtos(groupExpenseDtoService.getAll(userDto.getId()));
+    return new ResponseEntity(groupExpenseResponse, HttpStatus.OK);
   }
 
   @GetMapping("{groupExpenseId}")

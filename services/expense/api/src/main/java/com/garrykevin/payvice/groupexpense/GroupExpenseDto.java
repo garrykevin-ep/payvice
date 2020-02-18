@@ -1,5 +1,7 @@
 package com.garrykevin.payvice.groupexpense;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.garrykevin.payvice.expense.ExpenseDto;
 import com.garrykevin.payvice.user.UserDto;
 import java.util.List;
@@ -15,5 +17,6 @@ public class GroupExpenseDto {
 
   Set<UserDto> members;
 
+  @JsonInclude(Include.NON_NULL)
   List<ExpenseDto> expenses;
 }

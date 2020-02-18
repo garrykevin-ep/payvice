@@ -27,6 +27,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @EnableWebSecurity
@@ -64,8 +66,11 @@ public class SecurityConfig {
     protected void configure(HttpSecurity http) throws Exception {
 
       http
+
         .csrf()
         .disable()
+          .cors()
+          .disable()
         .authorizeRequests()
         .antMatchers("/auth/**").permitAll()
         //allow authenticated requests
@@ -79,6 +84,16 @@ public class SecurityConfig {
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 ;
       http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigure() {
+      return new WebMvcConfigurer() {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+          registry.addMapping("*").allowedOrigins("http://localhost:9200");
+        }
+      };
     }
 
     @Bean
