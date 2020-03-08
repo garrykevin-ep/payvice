@@ -20,7 +20,6 @@ import com.garrykevin.payvice.user.model.User;
 import com.garrykevin.payvice.user.repository.UserRepository;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,13 +70,8 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
             .findAny()
             .orElseThrow(() -> new UserNotFoundException(ApplicationErrorCodes.USER_NOT_FOUND))
         );
-
-        // set participant share
-        if ( createExpenseParam.getShareType() == PayviceConstants.EQUAL_SHARE ) {
-          expenseParticipant.setShareAmount(createExpenseParam.getAmount() / (double) expenseUserParticipants.size() );
-
-        }
-        return expenseParticipant;
+          return this.calculateShareAmount(expenseParticipant,PayviceConstants.EQUAL_SHARE,
+              createExpenseParam.getAmount(),expenseUserParticipants.size());
       })
       .collect(Collectors.toSet());
     // set expense participants
@@ -95,6 +89,7 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
     Set<ExpensePayer> expensePayers = createExpenseParam.getExpensePayers()
       .stream()
       .map(param -> {
+        // TODO wrap into function
         ExpensePayer expensePayer = new ExpensePayer();
         expensePayer.setAmountPaid(param.getAmountPaid());
         expensePayer.setUser(
@@ -118,6 +113,14 @@ public class ExpenseDtoServiceImpl implements ExpenseDtoService {
 
     expenseRepository.save(expense);
     return expenseMapper.modelToDto(expense);
+  }
+
+  // TODO: wrap all inputs to class when grows
+  private ExpenseParticipant calculateShareAmount(ExpenseParticipant expenseParticipant,int shareType, double totalAmt, int numParticipant) {
+    if ( shareType == PayviceConstants.EQUAL_SHARE ) {
+      expenseParticipant.setShareAmount(totalAmt / (double) numParticipant);
+    }
+    return expenseParticipant;
   }
 
 
