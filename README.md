@@ -19,9 +19,12 @@ This is a gradle multi-project setup.
 
 ### Why this Project
 This helped me to learn spring boot and improve [domain modeling](https://en.wikipedia.org/wiki/Domain_model).
+
 Splitwise does not have per-item expense seperation.
+
 Example: In shared bill, User A alone bought an item. The item's expense has to go to User A including tax.
 Current Solutions does not have per item seperation.
+
 Easy payment integration such as UPI is not available.
 
 
